@@ -8,11 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using BookStoreApp_API.Data;
 using BookStoreApp_API.Models.Author;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookStoreApp_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AuthorsController : ControllerBase
     {
         private readonly BookStoreDbContext _context;
@@ -47,6 +49,7 @@ namespace BookStoreApp_API.Controllers
             return authorDto;
         }
 
+        [Authorize(Roles = "Administrator")]
         // PUT: api/Authors/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -89,6 +92,7 @@ namespace BookStoreApp_API.Controllers
         // POST: api/Authors
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public async Task<ActionResult<AuthorCreateDTO>> PostAuthor(AuthorCreateDTO authorDto)
         {
             /* First Method of using DTO */
@@ -112,6 +116,7 @@ namespace BookStoreApp_API.Controllers
 
         // DELETE: api/Authors/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteAuthor(int id)
         {
             var author = await _context.Authors.FindAsync(id);
